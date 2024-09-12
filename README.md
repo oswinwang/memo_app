@@ -1,16 +1,13 @@
 # memorize
 
-A new Flutter project.
+專題的前端
 
-## Getting Started
+main function在lib資料夾中
 
-This project is a starting point for a Flutter application.
+pages中為所有的頁面
 
-A few resources to get you started if this is your first Flutter project:
+component為一些按鈕的樣式
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+model是資料的格式
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+service目前存放連接api的功能

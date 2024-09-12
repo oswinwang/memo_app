@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_import
+// ignore_for_file: prefer_const_constructors, unused_import, duplicate_ignore
 
 import 'dart:ffi';
 
@@ -15,6 +15,8 @@ import 'model/memoListSet.dart';
 void main() {
   runApp(const MyApp());
 }
+
+// ignore_for_file: prefer_const_constructors
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
