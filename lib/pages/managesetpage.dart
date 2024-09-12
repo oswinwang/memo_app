@@ -1,0 +1,61 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:flutter/material.dart';
+import 'package:memorize/components/memotile.dart';
+import 'package:memorize/model/memoListSet.dart';
+import 'package:memorize/model/setname.dart';
+import 'package:memorize/services/api_service.dart';
+import 'package:provider/provider.dart';
+
+class Managesetpage extends StatelessWidget {
+  Managesetpage({super.key});
+
+  List<Setname> setnames = [];
+
+  Future getsetname() async {
+    setnames = await ApiService.getSetNames(); // 呼叫 ApiService 中的函數
+    print(setnames.length);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: Text(
+          '管理現有記憶集',
+          style: TextStyle(
+            color: Colors.white,
+          )
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueGrey,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
+      body: FutureBuilder(
+        future: getsetname(), 
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              itemCount: setnames.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  child: Memotile(
+                    momolistname: setnames[index].name,
+                  ),
+                  onTap: (){
+                    print(setnames[index].name);
+                  }
+                );
+              }
+            );
+          }else{
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+  }
+}
