@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:memorize/model/setname.dart';
+import 'package:memorize/pages/homepage.dart';
+import 'package:memorize/pages/learningpage1.dart';
 
 class Testingpage extends StatefulWidget {
   const Testingpage({super.key});
@@ -15,8 +17,6 @@ class Testingpage extends StatefulWidget {
 }
 
 class _TestingpageState extends State<Testingpage> {
-  final String memo = "apple";
-  final String explain = "蘋果";
   List<String> stringArray = [];
   int currentIndex = 0;
 
@@ -24,6 +24,7 @@ class _TestingpageState extends State<Testingpage> {
   void initState() {
     super.initState();
     fetchData();
+    currentIndex = 0;
   }
 
   // Fetch data from API
@@ -45,6 +46,13 @@ class _TestingpageState extends State<Testingpage> {
 
   void _nextString() {
     setState(() {
+      print(currentIndex);
+      if(currentIndex == stringArray.length - 1) {
+        Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context) => HomePage(),)
+        );
+      }
       currentIndex = (currentIndex + 1) % stringArray.length;
     });
   }
@@ -77,10 +85,45 @@ class _TestingpageState extends State<Testingpage> {
                     style: TextStyle(fontSize: 24),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _nextString,
-                    child: Text('Next String'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _nextString,
+                        child: Text('0'),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: _nextString,
+                        child: Text('1'),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: _nextString,
+                        child: Text('2'),
+                      ),
+                    ]
                   ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _nextString,
+                        child: Text('3'),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: _nextString,
+                        child: Text('4'),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: _nextString,
+                        child: Text('5'),
+                      ),
+                    ]
+                  )
                 ],
               ),
         )

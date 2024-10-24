@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
+        automaticallyImplyLeading: false,
       ),
 
       body: _pages[_selectedIndex],
