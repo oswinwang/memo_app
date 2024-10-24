@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:memorize/model/setname.dart';
 import 'package:memorize/pages/homepage.dart';
-import 'package:memorize/pages/learningpage1.dart';
 
 class Testingpage extends StatefulWidget {
   const Testingpage({super.key});
@@ -80,9 +79,22 @@ class _TestingpageState extends State<Testingpage> {
         :Column(
           mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    stringArray[currentIndex],  // Display current string
-                    style: TextStyle(fontSize: 24),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      padding: EdgeInsets.all(50),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blueGrey,
+                      ),
+                      child: Text(
+                        stringArray[currentIndex],  // Display current string
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.white
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 20),
                   Row(
