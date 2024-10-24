@@ -49,7 +49,8 @@ class _TestingpageState extends State<Testingpage> {
                         textAlign: TextAlign.center, 
                         style: TextStyle(
                           color: Colors.white, 
-                          fontSize: 20),
+                          fontSize: 20
+                        ),
                       ),
                     )
                   ),
@@ -58,6 +59,28 @@ class _TestingpageState extends State<Testingpage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  GestureDetector(
+                    child: Container(
+                      child: Text(
+                        "0",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      width: 70,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.blueGrey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onTap: () {
+                      print('0');
+                    },
+                  ),
+                  SizedBox(width: 20),
                   GestureDetector(
                     child: Container(
                       child: Text(
@@ -101,7 +124,12 @@ class _TestingpageState extends State<Testingpage> {
                       print('2');
                     },
                   ),
-                  SizedBox(width: 20),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   GestureDetector(
                     child: Container(
                       child: Text(
@@ -123,12 +151,7 @@ class _TestingpageState extends State<Testingpage> {
                       print('3');
                     },
                   ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                  SizedBox(width: 20),
                   GestureDetector(
                     child: Container(
                       child: Text(

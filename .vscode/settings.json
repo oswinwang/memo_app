@@ -20,5 +20,6 @@
         "testingpage",
         "Uploadpage",
         "Uploadtonow"
-    ]
+    ],
+    "cmake.ignoreCMakeListsMissing": true
 }
