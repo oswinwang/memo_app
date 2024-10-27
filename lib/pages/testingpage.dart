@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print, unnecessary_import
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:memorize/model/setname.dart';
 import 'package:memorize/pages/homepage.dart';
+import 'package:memorize/pages/resultpage.dart';
+import 'package:memorize/style/elvatorbutonstyle.dart';
 
 class Testingpage extends StatefulWidget {
   const Testingpage({super.key});
@@ -49,7 +49,7 @@ class _TestingpageState extends State<Testingpage> {
       if(currentIndex == stringArray.length - 1) {
         Navigator.push(
           context, 
-          MaterialPageRoute(builder: (context) => HomePage(),)
+          MaterialPageRoute(builder: (context) => Resultpage(),)
         );
       }
       currentIndex = (currentIndex + 1) % stringArray.length;
@@ -62,7 +62,7 @@ class _TestingpageState extends State<Testingpage> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
-          "testingpage",
+          "Testing Page",
           style: TextStyle(
             color: Colors.white,
           )
@@ -75,70 +75,63 @@ class _TestingpageState extends State<Testingpage> {
       ),
       body: Center(
         child: stringArray.isEmpty
-        ? CircularProgressIndicator()
-        :Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      padding: EdgeInsets.all(50),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blueGrey,
-                      ),
-                      child: Text(
-                        stringArray[currentIndex],  // Display current string
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.white
+          ? CircularProgressIndicator()
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 50),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.blueGrey,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
                         ),
+                      ],
+                    ),
+                    child: Text(
+                      stringArray[currentIndex],
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _nextString,
-                        child: Text('0'),
-                      ),
-                      SizedBox(width: 20),
-                      ElevatedButton(
-                        onPressed: _nextString,
-                        child: Text('1'),
-                      ),
-                      SizedBox(width: 20),
-                      ElevatedButton(
-                        onPressed: _nextString,
-                        child: Text('2'),
-                      ),
-                    ]
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _nextString,
-                        child: Text('3'),
-                      ),
-                      SizedBox(width: 20),
-                      ElevatedButton(
-                        onPressed: _nextString,
-                        child: Text('4'),
-                      ),
-                      SizedBox(width: 20),
-                      ElevatedButton(
-                        onPressed: _nextString,
-                        child: Text('5'),
-                      ),
-                    ]
-                  )
-                ],
-              ),
-        )
-      );
+                ),
+                SizedBox(height: 40),
+                buildButtonRow([0, 1, 2]),
+                SizedBox(height: 20),
+                buildButtonRow([3, 4, 5]),
+              ],
+            ),
+      ),
+    );
+  }
+
+  // Custom button row builder
+  Widget buildButtonRow(List<int> buttonLabels) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: buttonLabels.map((label) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: ElevatedButton(
+            onPressed: _nextString,
+            style: ButtonStyles.elevatedButtonStyle(),
+            child: Text(
+              '$label',
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+          ),
+        );
+      }).toList(),
+    );
   }
 }
