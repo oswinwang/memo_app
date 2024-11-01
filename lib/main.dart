@@ -12,9 +12,12 @@ import 'package:provider/provider.dart';
 
 import 'model/memoListSet.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Future.delayed(Duration(seconds: 1)); // 设置2秒延迟
+  runApp(MyApp());
 }
+
 
 // ignore_for_file: prefer_const_constructors
 

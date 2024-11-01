@@ -49,13 +49,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  flutter_native_splash: ^2.2.20
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/logo.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -91,3 +93,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#FFFFFF"            # 背景颜色
+  image: assets/logo.png      # 启动画面中的 logo 图片
+  android: true               # 启用 Android 启动画面
+  ios: true                   # 启用 iOS 启动画面
+  android_gravity: center     # Android 中 logo 的对齐方式
+  ios_content_mode: center    # iOS 中 logo 的对齐方式
+  fullscreen: true            # 全屏显示
