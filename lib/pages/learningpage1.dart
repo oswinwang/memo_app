@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/choosepage.dart';
 import 'package:memorize/pages/importpage1.dart';
+import 'package:memorize/pages/listpage.dart';
 import 'package:memorize/pages/managepage.dart';
 
 class LearningPage1 extends StatelessWidget {

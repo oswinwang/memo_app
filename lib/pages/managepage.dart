@@ -6,10 +6,10 @@ class Managepage extends StatefulWidget {
   const Managepage({super.key});
 
   @override
-  State<Managepage> createState() => _ChoosePageState();
+  State<Managepage> createState() => _Managepage();
 }
 
-class _ChoosePageState extends State<Managepage> {
+class _Managepage extends State<Managepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

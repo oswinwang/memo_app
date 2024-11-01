@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:memorize/components/memotile.dart';
 import 'package:memorize/model/memoListSet.dart';
 import 'package:memorize/model/setname.dart';
+import 'package:memorize/pages/listpage.dart';
 import 'package:memorize/services/api_service.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +48,12 @@ class Managesetpage extends StatelessWidget {
                   ),
                   onTap: (){
                     print(setnames[index].name);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ListPage(),
+                      )
+                    );
                   }
                 );
               }

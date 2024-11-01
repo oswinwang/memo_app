@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_import
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:memorize/pages/homepage.dart';
+import 'package:memorize/style/elvatorbutonstyle.dart';
 
 class Resultpage extends StatelessWidget {
   const Resultpage({super.key});
@@ -21,13 +24,36 @@ class Resultpage extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
 
-      body: const Center(
-        child: Column(
-          children: [
-            Text('結果頁面'),
-          ],
-        ),
-
+      body: Center(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '已完成今日複習',
+                style: TextStyle(
+                  fontSize: 30
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ButtonStyles.elevatedButtonStyle(),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+                child: Text(
+                  '回首頁',
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
+                )
+              ),
+            ],
+          ),
+        )
       ),
     );
   }

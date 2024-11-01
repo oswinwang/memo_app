@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/managesetpage.dart';
@@ -87,7 +87,7 @@ class _ChoosePageState extends State<Importpage> {
               ),
               child: TextButton(
                 onPressed: () {
-                  print('管理現有記憶集');
+                  print('查看現有記憶集');
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Managesetpage()),
