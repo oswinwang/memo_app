@@ -13,10 +13,10 @@ class ChoosePage extends StatelessWidget {
 
   List<Setname> setnames = [];
 
-  Future getsetname() async {
-    setnames = await ApiService.getSetNames(); // 呼叫 ApiService 中的函數
-    print(setnames.length);
+  Future<void> getsetname() async {
+  setnames = await ApiService.getSetNames();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +25,16 @@ class ChoosePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "選擇記憶集",
-          style: TextStyle(
-            color: Colors.white,
-          )
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueGrey,
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder(
-        future: getsetname(), 
+        future: getsetname(),
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
               itemCount: setnames.length,
               itemBuilder: (context, index) {
@@ -46,17 +42,20 @@ class ChoosePage extends StatelessWidget {
                   child: Memotile(
                     momolistname: setnames[index].name,
                   ),
-                  onTap: (){
-                    print(setnames[index].name);
+                  onTap: () {
+                    String selectedName = setnames[index].name;
+                    print(selectedName);
                     Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => Testingpage(),)
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Testingpage(name: selectedName),  // 傳遞 name
+                      ),
                     );
-                  }
+                  },
                 );
-              }
+              },
             );
-          }else{
+          } else {
             return Center(child: CircularProgressIndicator());
           }
         },

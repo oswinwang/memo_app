@@ -9,11 +9,14 @@ import 'package:memorize/pages/resultpage.dart';
 import 'package:memorize/style/elvatorbutonstyle.dart';
 
 class Testingpage extends StatefulWidget {
-  const Testingpage({super.key});
+  final String name;
+
+  const Testingpage({super.key, required this.name});
 
   @override
   State<Testingpage> createState() => _TestingpageState();
 }
+
 
 class _TestingpageState extends State<Testingpage> {
   List<String> stringArray = [];
@@ -26,16 +29,16 @@ class _TestingpageState extends State<Testingpage> {
     currentIndex = 0;
   }
 
-  // Fetch data from API
+  // Fetch data from API based on selected name
+  // Fetch data from API based on selected name
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://10.242.184.203:5000'));
+    final response = await http.get(Uri.parse('http://192.168.193.141:5000/API/choose/${widget.name}'));
 
     if (response.statusCode == 200) {
       setState(() {
-        var jsondata = jsonDecode(response.body);
-        for (var eachset in jsondata) {
-          final setname = Setname(name: eachset['name']);
-          stringArray.add(setname.name);
+        var jsonData = jsonDecode(response.body);
+        for (var eachSet in jsonData) {
+          stringArray.add(eachSet["word"]); // 使用 word 字段
         }
       });
     } else {
@@ -43,13 +46,14 @@ class _TestingpageState extends State<Testingpage> {
     }
   }
 
+
   void _nextString() {
     setState(() {
       print(currentIndex);
-      if(currentIndex == stringArray.length - 1) {
+      if (currentIndex == stringArray.length - 1) {
         Navigator.push(
           context, 
-          MaterialPageRoute(builder: (context) => Resultpage(),)
+          MaterialPageRoute(builder: (context) => Resultpage()),
         );
       }
       currentIndex = (currentIndex + 1) % stringArray.length;
@@ -62,16 +66,12 @@ class _TestingpageState extends State<Testingpage> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
-          "Testing Page",
-          style: TextStyle(
-            color: Colors.white,
-          )
+          "Testing Page - ${widget.name}",  // 在標題顯示選擇的 name
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueGrey,
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Center(
         child: stringArray.isEmpty
@@ -135,3 +135,4 @@ class _TestingpageState extends State<Testingpage> {
     );
   }
 }
+
