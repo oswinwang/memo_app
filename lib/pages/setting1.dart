@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/accountsettingpage.dart';
+import 'package:memorize/pages/logginpage.dart';
 
 class Setting1 extends StatelessWidget {
   const Setting1({super.key});
@@ -49,28 +50,11 @@ class Setting1 extends StatelessWidget {
             ),
             child: TextButton(
                 onPressed: () {
-                  print('custom setting');
-                },
-                child: Text(
-                  '自定義設定',
-                  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 40),
-            Container(
-            width: 170,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.blueGrey,
-            ),
-            child: TextButton(
-                onPressed: () {
                   print('log out');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
                 },
                 child: Text(
                   '登出',

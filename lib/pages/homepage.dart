@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/learningpage1.dart';
 import 'package:memorize/pages/setting1.dart';
-import 'package:memorize/pages/society1.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +14,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List _pages = [
     LearningPage1(),
-    Society1(),
     Setting1(),
   ];
 
@@ -57,10 +55,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.social_distance),
-            label: "Society",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

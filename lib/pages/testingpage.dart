@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print, unnecessary_import, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, avoid_print, unnecessary_import, unused_import, non_constant_identifier_names, camel_case_types
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -17,9 +17,15 @@ class Testingpage extends StatefulWidget {
   State<Testingpage> createState() => _TestingpageState();
 }
 
+class word {
+  final String word1;
+  final int id;
+
+  word({required this.word1 , required this.id});
+}
 
 class _TestingpageState extends State<Testingpage> {
-  List<String> stringArray = [];
+  List<word> wordList = [];
   int currentIndex = 0;
 
   @override
@@ -38,7 +44,8 @@ class _TestingpageState extends State<Testingpage> {
       setState(() {
         var jsonData = jsonDecode(response.body);
         for (var eachSet in jsonData) {
-          stringArray.add(eachSet["word"]); // 使用 word 字段
+          
+          wordList.add(word(word1: eachSet["word"], id: eachSet["id"]));
         }
       });
     } else {
@@ -46,17 +53,38 @@ class _TestingpageState extends State<Testingpage> {
     }
   }
 
+Future<void> PostData(int id, int score) async {
+  final response = await http.post(
+    Uri.parse('http://192.168.193.141:5000/API/choose/${widget.name}/$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, int>{
+      'score': score,
+    }),
+  );
 
-  void _nextString() {
+  if (response.statusCode == 200) {
     setState(() {
+      var jsonData = jsonDecode(response.body);
+      print(jsonData["message"]);
+    });
+  } else {
+    throw Exception('Failed to load strings');
+  }
+}
+
+  void _nextString(int score) {
+    setState(() {
+      PostData(wordList[currentIndex].id,score);
       print(currentIndex);
-      if (currentIndex == stringArray.length - 1) {
+      if (currentIndex == wordList.length - 1) {
         Navigator.push(
           context, 
           MaterialPageRoute(builder: (context) => Resultpage()),
         );
       }
-      currentIndex = (currentIndex + 1) % stringArray.length;
+      currentIndex = (currentIndex + 1) % wordList.length;
     });
   }
 
@@ -74,7 +102,7 @@ class _TestingpageState extends State<Testingpage> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: stringArray.isEmpty
+        child: wordList.isEmpty
           ? CircularProgressIndicator()
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +123,7 @@ class _TestingpageState extends State<Testingpage> {
                       ],
                     ),
                     child: Text(
-                      stringArray[currentIndex],
+                      wordList[currentIndex].word1,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -123,7 +151,7 @@ class _TestingpageState extends State<Testingpage> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: ElevatedButton(
-            onPressed: _nextString,
+            onPressed: () => _nextString(label),
             style: ButtonStyles.elevatedButtonStyle(),
             child: Text(
               '$label',

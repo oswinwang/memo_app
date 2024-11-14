@@ -1,7 +1,12 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_final_fields
 
+import 'dart:io';
+import 'dart:convert'; // 用於 JSON 編碼
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:excel/excel.dart';
+import 'package:http/http.dart' as http;
+
 
 class Uploadpage extends StatefulWidget {
   const Uploadpage({super.key});
@@ -16,20 +21,18 @@ class _UploadpageState extends State<Uploadpage> {
   TextEditingController _textController = TextEditingController(); // TextField 控制器
 
   Future<void> _pickFile() async {
-    // 使用 FilePicker 選擇 Excel 檔案
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx', 'xls'], // 允許的檔案類型
     );
 
     if (result != null) {
-      // 檔案選擇成功，更新檔案名稱和路徑
       setState(() {
         _fileName = result.files.single.name;
         _filePath = result.files.single.path; // 取得檔案路徑
       });
+
     } else {
-      // 使用者取消選擇檔案
       setState(() {
         _fileName = null;
         _filePath = null;
@@ -37,21 +40,71 @@ class _UploadpageState extends State<Uploadpage> {
     }
   }
 
-  void _uploadFile() {
-    // 在這裡處理檔案上傳邏輯
-    // 例如，可以將檔案上傳到伺服器
+  Future<void> _readAndPrintExcel(File file) async {
+    // 讀取 Excel 檔案
+    var bytes = file.readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+
+    // 定義 JSON 結構
+    Map<String, dynamic> jsonData = {
+      "name": _textController.text,
+      "words": []
+    };
+
+    // 假設資料在第一個 sheet 中
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        if (row[0] != null && row[1] != null) {
+          // 將每行的數據加入 JSON
+          jsonData["words"].add({
+            "word": row[0]!.value.toString(),
+            "meaning": row[1]!.value.toString()
+          });
+        }
+      }
+      break; // 僅讀取第一個 sheet
+    }
+    PostData(jsonData);
+    // 打印 JSON 結果
+    print(jsonEncode(jsonData));
+  }
+
+  Future<void> PostData(Map<String, dynamic> jsonData) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.193.141:5000/API/New'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(jsonData), 
+    );
+
+    if (response.statusCode == 201) {
+      setState(() {
+        var responseData = jsonDecode(response.body);
+        print(responseData["message"]);
+      });
+    } else {
+      throw Exception('Failed to upload data');
+    }
+  }
+
+  void  _uploadFile() async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('上傳檔案: $_fileName')),
     );
     Navigator.pop(context);
 
-    // 清空 TextField
+      // 解析並打印 Excel 文件內容
+      if (_filePath != null) {
+        await _readAndPrintExcel(File(_filePath!));
+      }
+
+
     _textController.clear();
   }
 
   @override
   void dispose() {
-    // 銷毀 TextEditingController 以釋放資源
     _textController.dispose();
     super.dispose();
   }
@@ -81,14 +134,12 @@ class _UploadpageState extends State<Uploadpage> {
               onPressed: _pickFile,
               child: Text('選擇 Excel 檔案'),
             ),
-            SizedBox(height: 20), // 增加一點距離
+            SizedBox(height: 20),
             TextField(
-              
               controller: _textController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: '記憶集名稱', // 可輸入描述
-                
+                labelText: '記憶集名稱',
               ),
             ),
             if (_fileName != null)
@@ -98,14 +149,13 @@ class _UploadpageState extends State<Uploadpage> {
                     '選擇的檔案: $_fileName',
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
-                  SizedBox(height: 10), // 增加一點距離
+                  SizedBox(height: 10),
                   Text(
                     '檔案路徑: $_filePath',
                     style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                    overflow: TextOverflow.ellipsis, // 如果路徑太長，可以使用省略號
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  
-                  SizedBox(height: 20), // 再次增加距離
+                  SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _uploadFile,
                     child: Text('上傳檔案'),
@@ -123,6 +173,7 @@ class _UploadpageState extends State<Uploadpage> {
     );
   }
 }
+
 
 
 

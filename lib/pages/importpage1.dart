@@ -36,18 +36,18 @@ class _ChoosePageState extends State<Importpage> {
           children: [
             Container(
               width: 170,
-              height: 40,
+              height: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.blueGrey,
               ),
               child: TextButton(
                 onPressed: () {
-                  print('上傳至現有記憶集');
+                  print('上傳至現有記憶集(暫時沒有要用)');
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Uploadtonow(),));
                 },
                 child: Text(
-                  '上傳至現有記憶集',
+                  '上傳至現有記憶集\n(暫時沒有要用)',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
