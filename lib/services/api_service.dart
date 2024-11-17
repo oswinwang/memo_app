@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:memorize/model/setname.dart';
 
 class ApiService {
-  static Future<List<Setname>> getSetNames() async {
-    final url = Uri.parse('http://192.168.193.141:5000/API/choose');
+  static Future<List<Setname>> getSetNames(String id) async {
+    final url = Uri.parse('http://192.168.193.141:5000/API/choose/${id}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

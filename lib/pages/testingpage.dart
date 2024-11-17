@@ -44,7 +44,7 @@ class _TestingpageState extends State<Testingpage> {
       setState(() {
         var jsonData = jsonDecode(response.body);
         for (var eachSet in jsonData) {
-          
+          print(eachSet["word"]);
           wordList.add(word(word1: eachSet["word"], id: eachSet["id"]));
         }
       });

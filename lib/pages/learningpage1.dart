@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, prefer_const_constructors, avoid_print
+// ignore_for_file: unused_import, prefer_const_constructors, avoid_print, use_super_parameters
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/choosepage.dart';
 import 'package:memorize/pages/importpage1.dart';
@@ -6,7 +6,8 @@ import 'package:memorize/pages/listpage.dart';
 import 'package:memorize/pages/managepage.dart';
 
 class LearningPage1 extends StatelessWidget {
-  const LearningPage1({super.key});
+  final String id;
+  const LearningPage1(this.id, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class LearningPage1 extends StatelessWidget {
                     print('choose');
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChoosePage()),
+                      MaterialPageRoute(builder: (context) => ChoosePage(id)),
                     );
                   },
                   child: Text(
@@ -54,7 +55,7 @@ class LearningPage1 extends StatelessWidget {
                     print('import');
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Importpage()),
+                      MaterialPageRoute(builder: (context) => Importpage(id)),
                     );
                   },
                   child: Text(

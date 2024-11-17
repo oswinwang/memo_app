@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, library_private_types_in_public_api, annotate_overrides, avoid_print, sort_child_properties_last
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:memorize/pages/homepage.dart';
 import 'package:memorize/pages/registerpage.dart';
 
@@ -16,21 +17,47 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _login() async {
+    postData();
     // 先印出提示，這行會在登入按鈕被按下時執行
     print('Login pressed');
-    
-    // 顯示登入成功的 Snackbar 訊息
-    ScaffoldMessenger.of(context).showSnackBar(
+  }
+
+
+    Future<void> postData() async {
+    Map<String, dynamic> jsonData = {
+      "account": _usernameController.text,
+      "password": _passwordController.text,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://192.168.193.141:5000/API/Login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(jsonData),
+    );
+
+    if (response.statusCode == 201) {
+      setState(() {
+        var responseData = jsonDecode(response.body);
+        if (responseData["message"] == "Login successfully") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(responseData["ID"].toString()),
+            ),
+          );
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('登入成功'), // 訊息文字
+        content: Text('登入失敗:('), // 訊息文字
         duration: Duration(seconds: 2), // 持續時間
         backgroundColor: Colors.blueGrey[400], // 訊息背景顏色
       ),
     );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
-    );
+    }
   }
 
   Widget build(BuildContext context) {

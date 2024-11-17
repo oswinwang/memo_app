@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_final_fields, use_super_parameters, avoid_print, non_constant_identifier_names
 
 import 'dart:io';
 import 'dart:convert'; // 用於 JSON 編碼
@@ -9,7 +9,8 @@ import 'package:http/http.dart' as http;
 
 
 class Uploadpage extends StatefulWidget {
-  const Uploadpage({super.key});
+  final String id;
+  const Uploadpage(this.id, {Key? key}) : super(key: key);
 
   @override
   _UploadpageState createState() => _UploadpageState();
@@ -47,6 +48,7 @@ class _UploadpageState extends State<Uploadpage> {
 
     // 定義 JSON 結構
     Map<String, dynamic> jsonData = {
+      "id": widget.id,
       "name": _textController.text,
       "words": []
     };
@@ -84,8 +86,10 @@ class _UploadpageState extends State<Uploadpage> {
         print(responseData["message"]);
       });
     } else {
-      throw Exception('Failed to upload data');
-    }
+        setState(() {
+        var responseData = jsonDecode(response.body);
+        print(responseData["message"]);
+      });    }
   }
 
   void  _uploadFile() async {

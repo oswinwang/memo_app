@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/managesetpage.dart';
@@ -6,7 +6,8 @@ import 'package:memorize/pages/uploadpage.dart';
 import 'package:memorize/pages/uploadtonow.dart';
 
 class Importpage extends StatefulWidget {
-  const Importpage({super.key});
+  final String id;
+  const Importpage(this.id, {Key? key}) : super(key: key);
 
   @override
   State<Importpage> createState() => _ChoosePageState();
@@ -66,7 +67,7 @@ class _ChoosePageState extends State<Importpage> {
               child: TextButton(
                 onPressed: () {
                   print('上傳新記憶集');
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Uploadpage(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Uploadpage(widget.id),));
                 },
                 child: Text(
                   '上傳新記憶集',
@@ -90,7 +91,7 @@ class _ChoosePageState extends State<Importpage> {
                   print('查看現有記憶集');
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Managesetpage()),
+                    MaterialPageRoute(builder: (context) => Managesetpage(widget.id)),
                   );
                 },
                 child: Text(

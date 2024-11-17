@@ -19,7 +19,7 @@ class _UploadtonowState extends State<Uploadtonow> {
   List<Setname> setnames = [];
 
   Future getsetname() async {
-    setnames = await ApiService.getSetNames(); // 呼叫 ApiService 中的函數
+    setnames = await ApiService.getSetNames("0"); // 呼叫 ApiService 中的函數
     print(setnames.length);
   }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_import, avoid_print, must_be_immutable
+// ignore_for_file: prefer_const_constructors, unused_import, avoid_print, must_be_immutable, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:memorize/components/memotile.dart';
@@ -9,12 +9,12 @@ import 'package:memorize/model/setname.dart';
 import 'package:memorize/services/api_service.dart'; // 引入新檔案
 
 class ChoosePage extends StatelessWidget {
-  ChoosePage({super.key});
-
+  final String id;
+  ChoosePage(this.id, {Key? key}) : super(key: key);
   List<Setname> setnames = [];
 
   Future<void> getsetname() async {
-  setnames = await ApiService.getSetNames();
+  setnames = await ApiService.getSetNames(id);
   }
 
 

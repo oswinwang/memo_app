@@ -41,7 +41,7 @@ class Resultpage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => HomePage('0')),
                   );
                 },
                 child: Text(

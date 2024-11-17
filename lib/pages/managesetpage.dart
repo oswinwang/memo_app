@@ -9,12 +9,13 @@ import 'package:memorize/services/api_service.dart';
 import 'package:provider/provider.dart';
 
 class Managesetpage extends StatelessWidget {
-  Managesetpage({super.key});
+  final String id;
+  Managesetpage(this.id, {Key? key}) : super(key: key);
 
   List<Setname> setnames = [];
 
   Future getsetname() async {
-    setnames = await ApiService.getSetNames(); // 呼叫 ApiService 中的函數
+    setnames = await ApiService.getSetNames(id); // 呼叫 ApiService 中的函數
     print(setnames.length);
   }
 
@@ -51,7 +52,7 @@ class Managesetpage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ListPage(),
+                        builder: (context) => ListPage(momolistname: setnames[index].name ,id:id),
                       )
                     );
                   }

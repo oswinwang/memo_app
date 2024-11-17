@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, prefer_const_constructors, sort_child_properties_last
-
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -14,7 +16,31 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _register() async {
-    print("register success");
+    postData();
+  }
+  
+  Future<void> postData() async {
+    Map<String, dynamic> jsonData = {
+      "account": _usernameController.text,
+      "password": _passwordController.text,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://192.168.193.141:5000/API/Account'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(jsonData),
+    );
+
+    if (response.statusCode == 201) {
+      setState(() {
+        var responseData = jsonDecode(response.body);
+        print(responseData["message"]);
+      });
+    } else {
+      throw Exception('Failed to upload data');
+    }
   }
 
   @override

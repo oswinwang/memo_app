@@ -5,17 +5,23 @@ import 'package:memorize/pages/learningpage1.dart';
 import 'package:memorize/pages/setting1.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String id;
+  const HomePage(this.id, {Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final List _pages = [
-    LearningPage1(),
-    Setting1(),
-  ];
+  final List _pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // 在此处通过 widget.id 来访问传递的 id
+    _pages.add(LearningPage1(widget.id)); // 将 id 传递给 LearningPage1
+    _pages.add(Setting1());
+  }
 
   int _selectedIndex = 0;
 
