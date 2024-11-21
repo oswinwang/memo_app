@@ -10,8 +10,10 @@ import 'package:memorize/style/elvatorbutonstyle.dart';
 
 class Testingpage extends StatefulWidget {
   final String name;
+  final String id;
+  final String username;
 
-  const Testingpage({super.key, required this.name});
+  const Testingpage({super.key, required this.name, required this.id, required this.username});
 
   @override
   State<Testingpage> createState() => _TestingpageState();
@@ -35,8 +37,6 @@ class _TestingpageState extends State<Testingpage> {
     currentIndex = 0;
   }
 
-  // Fetch data from API based on selected name
-  // Fetch data from API based on selected name
   Future<void> fetchData() async {
     final response = await http.get(Uri.parse('http://192.168.193.141:5000/API/choose/${widget.name}'));
 
@@ -49,30 +49,30 @@ class _TestingpageState extends State<Testingpage> {
         }
       });
     } else {
-      throw Exception('Failed to load strings');
+      
     }
   }
 
-Future<void> PostData(int id, int score) async {
-  final response = await http.post(
-    Uri.parse('http://192.168.193.141:5000/API/choose/${widget.name}/$id'),
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode(<String, int>{
-      'score': score,
-    }),
-  );
+  Future<void> PostData(int id, int score) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.193.141:5000/API/choose/${widget.name}/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, int>{
+        'score': score,
+      }),
+    );
 
-  if (response.statusCode == 200) {
-    setState(() {
-      var jsonData = jsonDecode(response.body);
-      print(jsonData["message"]);
-    });
-  } else {
-    throw Exception('Failed to load strings');
+    if (response.statusCode == 200) {
+      setState(() {
+        var jsonData = jsonDecode(response.body);
+        print(jsonData["message"]);
+      });
+    } else {
+      throw Exception('Failed to load strings');
+    }
   }
-}
 
   void _nextString(int score) {
     setState(() {
@@ -81,7 +81,7 @@ Future<void> PostData(int id, int score) async {
       if (currentIndex == wordList.length - 1) {
         Navigator.push(
           context, 
-          MaterialPageRoute(builder: (context) => Resultpage()),
+          MaterialPageRoute(builder: (context) => Resultpage(id:widget.id, userName: widget.username)),
         );
       }
       currentIndex = (currentIndex + 1) % wordList.length;

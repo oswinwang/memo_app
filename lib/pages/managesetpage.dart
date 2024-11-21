@@ -52,7 +52,7 @@ class Managesetpage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ListPage(momolistname: setnames[index].name ,id:id),
+                        builder: (context) => ListPage(momolistname: setnames[index].name ,userId:id),
                       )
                     );
                   }

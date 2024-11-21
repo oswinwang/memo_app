@@ -7,7 +7,10 @@ import 'package:memorize/pages/homepage.dart';
 import 'package:memorize/style/elvatorbutonstyle.dart';
 
 class Resultpage extends StatelessWidget {
-  const Resultpage({super.key});
+  final String id;
+  final String userName;
+
+  const Resultpage({super.key, required this.id, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class Resultpage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage('0')),
+                    MaterialPageRoute(builder: (context) => HomePage(id, userName)),
                   );
                 },
                 child: Text(

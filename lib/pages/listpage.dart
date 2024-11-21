@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print, sort_child_properties_last, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print, sort_child_properties_last, use_build_context_synchronously, unused_element, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 
 class ListPage extends StatefulWidget {
   final String momolistname;
-  final String id;
-  const ListPage({Key? key, required this.momolistname, required this.id}) : super(key: key);
+  final String userId;
+  const ListPage({Key? key, required this.momolistname, required this.userId}) : super(key: key);
 
   @override
   _ListPageState createState() => _ListPageState();
@@ -16,6 +16,9 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> itemList = [];
   bool isAscending = true;
+  final TextEditingController _wordController = TextEditingController();
+  final TextEditingController _meaningController = TextEditingController();
+
 
   @override
   void initState() {
@@ -23,10 +26,9 @@ class _ListPageState extends State<ListPage> {
     fetchData();
   }
 
-  // 从 API 获取数据
   Future<void> fetchData() async {
     final response = await http.get(
-      Uri.parse('http://192.168.193.141:5000/API/choose/${widget.momolistname}'),
+      Uri.parse('http://192.168.193.141:5000/API/showWords/${widget.momolistname}'),
     );
 
     if (response.statusCode == 200) {
@@ -35,6 +37,8 @@ class _ListPageState extends State<ListPage> {
         itemList = jsondata.map<Map<String, dynamic>>((item) => {
               'id': item['id'],
               'word': item['word'],
+              'meaning': item['meaning'],
+              'review_date': item['review'],
             }).toList();
       });
     } else {
@@ -61,7 +65,6 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
-  // 删除整个记忆集
   Future<void> deleteEntireCollection() async {
     final response = await http.delete(
       Uri.parse('http://192.168.193.141:5000/API/Delete/${widget.momolistname}'),
@@ -71,7 +74,7 @@ class _ListPageState extends State<ListPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('記憶集刪除成功')),
       );
-      Navigator.of(context).pop(); // 返回上一页
+      Navigator.of(context).pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('記憶集刪除失敗')),
@@ -79,7 +82,6 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
-  // 按条件排序
   void _sortList(String sortType) {
     setState(() {
       if (sortType == 'Ascending') {
@@ -88,6 +90,168 @@ class _ListPageState extends State<ListPage> {
         itemList.sort((a, b) => b['word'].compareTo(a['word']));
       }
     });
+  }
+
+  void _new_word(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('新增單字'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // 自適應高度
+              children: [
+                TextField(
+                  controller: _wordController,
+                  decoration: InputDecoration(
+                    labelText: '輸入單字',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _meaningController,
+                  decoration: InputDecoration(
+                    labelText: '輸入解釋',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('確定'),
+              onPressed: () {
+                String word = _wordController.text.trim();
+                String meaning = _meaningController.text.trim();
+                if (word.isNotEmpty && meaning.isNotEmpty) {
+                  _postNewWord(word, meaning);
+                  Navigator.of(context).pop();  // 關閉對話框
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('請輸入單字及解釋！')),
+                  );
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _postNewWord(String word, String meaning) async {
+    final url = Uri.parse('http://192.168.193.141:5000/API/New/${widget.momolistname}');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'meaning': meaning,
+        'word': word,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('新增單字成功')),
+      );
+      fetchData();  // 成功後重新載入列表
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('新增單字失敗')),
+      );
+    }
+  }
+
+  void _editWord(BuildContext context, String word, String meaning, int id) {
+    _wordController.text = word;
+    _meaningController.text = meaning;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('編輯單字'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _wordController,
+                  decoration: InputDecoration(
+                    labelText: '輸入單字',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _meaningController,
+                  decoration: InputDecoration(
+                    labelText: '輸入解釋',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('確定'),
+              onPressed: () {
+                String word = _wordController.text.trim();
+                String meaning = _meaningController.text.trim();
+                if (word.isNotEmpty && meaning.isNotEmpty) {
+                  _updateWord(word, meaning, id);
+                  Navigator.of(context).pop();  // 關閉對話框
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('請輸入單字及解釋！')),
+                  );
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _updateWord(String word, String meaning, int id) async {
+    final url = Uri.parse('http://192.168.193.141:5000/API/UpdateWord/${widget.momolistname}/$id');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'meaning': meaning,
+        'name': word,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('編輯單字成功')),
+      );
+      fetchData();  // 成功後重新載入列表
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('新增單字失敗')),
+      );
+    }
   }
 
   @override
@@ -104,6 +268,7 @@ class _ListPageState extends State<ListPage> {
           color: Colors.white,
         ),
         actions: [
+
           IconButton(
             icon: Icon(Icons.more_vert_rounded),
             onPressed: () {
@@ -162,20 +327,21 @@ class _ListPageState extends State<ListPage> {
                 itemCount: itemList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(itemList[index]['word']),
+                    title: Text(itemList[index]['word'] + " - " + itemList[index]['meaning']),
+                    subtitle: Text("複習時間：" + itemList[index]['review_date']),
                     trailing: IconButton(
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () => deleteWord(itemList[index]['id'], index),
                     ),
+                    onTap: () => _editWord(context, itemList[index]['word'], itemList[index]['meaning'], itemList[index]['id']),
                   );
                 },
               ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          _new_word(context);
           print("新增單字");
-          // 在这里可以添加新的单词或执行其他功能
-          // 可以通过弹出对话框来输入新单词
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.blueGrey,

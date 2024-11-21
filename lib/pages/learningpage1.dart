@@ -7,7 +7,8 @@ import 'package:memorize/pages/managepage.dart';
 
 class LearningPage1 extends StatelessWidget {
   final String id;
-  const LearningPage1(this.id, {Key? key}) : super(key: key);
+  final String username;
+  const LearningPage1(this.id, this.username, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +31,11 @@ class LearningPage1 extends StatelessWidget {
                     print('choose');
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChoosePage(id)),
+                      MaterialPageRoute(builder: (context) => ChoosePage(id, username)),
                     );
                   },
                   child: Text(
-                    '選擇記憶集',
+                    '測驗',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -60,31 +61,6 @@ class LearningPage1 extends StatelessWidget {
                   },
                   child: Text(
                     '新增、管理記憶集',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 40), // 添加按钮之间的间距
-              Container(
-                width: 170,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.blueGrey,
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    print('manage');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Managepage()),
-                    );
-                  },
-                  child: Text(
-                    '測驗管理',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

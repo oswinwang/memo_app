@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,6 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     postData();
+    Navigator.pop(context);
   }
   
   Future<void> postData() async {

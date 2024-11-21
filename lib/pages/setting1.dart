@@ -5,7 +5,9 @@ import 'package:memorize/pages/accountsettingpage.dart';
 import 'package:memorize/pages/logginpage.dart';
 
 class Setting1 extends StatelessWidget {
-  const Setting1({super.key});
+  final String id;
+  final String userName;
+  const Setting1(this.id, this.userName, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class Setting1 extends StatelessWidget {
                   print('account setting');
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Accountsettingpage()),
+                      MaterialPageRoute(builder: (context) => Accountsettingpage(id, userName)),
                     );
                 },
                 child: Text(

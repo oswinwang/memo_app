@@ -44,19 +44,19 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(responseData["ID"].toString()),
+              builder: (context) => HomePage(responseData["ID"].toString(), _usernameController.text),
             ),
           );
         }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('登入失敗:('), // 訊息文字
-        duration: Duration(seconds: 2), // 持續時間
-        backgroundColor: Colors.blueGrey[400], // 訊息背景顏色
-      ),
-    );
+        SnackBar(
+          content: Text('登入失敗:('), // 訊息文字
+          duration: Duration(seconds: 2), // 持續時間
+          backgroundColor: Colors.blueGrey[400], // 訊息背景顏色
+        ),
+      );
     }
   }
 

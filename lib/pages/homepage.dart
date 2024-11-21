@@ -6,7 +6,8 @@ import 'package:memorize/pages/setting1.dart';
 
 class HomePage extends StatefulWidget {
   final String id;
-  const HomePage(this.id, {Key? key}) : super(key: key);
+  final String usewName;
+  const HomePage(this.id, this.usewName, {Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,8 +20,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     // 在此处通过 widget.id 来访问传递的 id
-    _pages.add(LearningPage1(widget.id)); // 将 id 传递给 LearningPage1
-    _pages.add(Setting1());
+    _pages.add(LearningPage1(widget.id, widget.usewName)); // 将 id 传递给 LearningPage1
+    _pages.add(Setting1(widget.id, widget.usewName));
   }
 
   int _selectedIndex = 0;
