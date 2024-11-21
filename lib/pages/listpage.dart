@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print, sort_child_properties_last, use_build_context_synchronously, unused_element, prefer_const_literals_to_create_immutables, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print, sort_child_properties_last, use_build_context_synchronously, unused_element, prefer_const_literals_to_create_immutables, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 
 class ListPage extends StatefulWidget {
   final String momolistname;
@@ -100,7 +101,7 @@ class _ListPageState extends State<ListPage> {
           title: Text('新增單字'),
           content: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.min, // 自適應高度
+              mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: _wordController,
@@ -322,28 +323,42 @@ class _ListPageState extends State<ListPage> {
       ),
       body: Center(
         child: itemList.isEmpty
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: itemList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(itemList[index]['word'] + " - " + itemList[index]['meaning']),
-                    subtitle: Text("複習時間：" + itemList[index]['review_date']),
-                    trailing: IconButton(
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+            itemCount: itemList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(itemList[index]['word'] + " - " + itemList[index]['meaning']),
+                subtitle: Text("複習時間：" + itemList[index]['review_date']),                  
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.history, color: Colors.blue),
+                      onPressed: () {
+                        print("object");
+                      },
+                    ),
+                    IconButton(
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () => deleteWord(itemList[index]['id'], index),
                     ),
-                    onTap: () => _editWord(context, itemList[index]['word'], itemList[index]['meaning'], itemList[index]['id']),
-                  );
-                },
-              ),
+                  ],
+                ),
+                onTap: () => _editWord(context, itemList[index]['word'], itemList[index]['meaning'], itemList[index]['id']),
+              );
+            },
+          ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _new_word(context);
           print("新增單字");
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          ),
         backgroundColor: Colors.blueGrey,
       ),
     );

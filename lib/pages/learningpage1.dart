@@ -20,7 +20,7 @@ class LearningPage1 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center, // 水平居中
             children: [
               Container(
-                width: 170,
+                width: 200,
                 height: 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -45,7 +45,7 @@ class LearningPage1 extends StatelessWidget {
               ),
               SizedBox(height: 40), // 添加按钮之间的间距
               Container(
-                width: 170,
+                width: 200,
                 height: 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -61,6 +61,31 @@ class LearningPage1 extends StatelessWidget {
                   },
                   child: Text(
                     '新增、管理記憶集',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 40), // 添加按钮之间的间距
+              Container(
+                width: 200,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.blueGrey,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    print('import');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Managepage(id: id,)),
+                    );
+                  },
+                  child: Text(
+                    '測驗紀錄',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

@@ -18,6 +18,14 @@ class _RegisterPageState extends State<RegisterPage> {
     postData();
     Navigator.pop(context);
   }
+
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
   
   Future<void> postData() async {
     Map<String, dynamic> jsonData = {
@@ -33,12 +41,18 @@ class _RegisterPageState extends State<RegisterPage> {
       body: jsonEncode(jsonData),
     );
 
+    print(response.statusCode);
+
     if (response.statusCode == 201) {
-      setState(() {
+      if (!_isDisposed) {
+        setState(() {
         var responseData = jsonDecode(response.body);
         print(responseData["message"]);
       });
+      }
+      print("success");
     } else {
+      print("fail");
       throw Exception('Failed to upload data');
     }
   }

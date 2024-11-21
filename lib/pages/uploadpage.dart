@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_final_fields, use_super_parameters, avoid_print, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_final_fields, use_super_parameters, avoid_print, non_constant_identifier_names, sort_child_properties_last, sized_box_for_whitespace
 
 import 'dart:io';
 import 'dart:convert'; // 用於 JSON 編碼
@@ -136,16 +136,30 @@ class _UploadpageState extends State<Uploadpage> {
           children: [
             ElevatedButton(
               onPressed: _pickFile,
-              child: Text('選擇 Excel 檔案'),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: '記憶集名稱',
+              child: Text(
+                '選擇 Excel 檔案',
+                style: TextStyle(color: Colors.white),
+                ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey[500],
               ),
             ),
+            SizedBox(height: 20),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: TextField(
+                controller: _textController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: '記憶集名稱',
+                  labelStyle: TextStyle(color: Colors.blueGrey),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueGrey),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
             if (_fileName != null)
               Column(
                 children: [
