@@ -48,6 +48,13 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
         ),
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              print('Info page');
+            },
+        )],
       ),
 
       body: _pages[_selectedIndex],

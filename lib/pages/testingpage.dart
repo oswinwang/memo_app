@@ -22,13 +22,15 @@ class Testingpage extends StatefulWidget {
 class word {
   final String word1;
   final int id;
+  final String meaning;
 
-  word({required this.word1 , required this.id});
+  word({required this.word1 , required this.id, required this.meaning});
 }
 
 class _TestingpageState extends State<Testingpage> {
   List<word> wordList = [];
   int currentIndex = 0;
+  bool _showMeaning = false;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _TestingpageState extends State<Testingpage> {
         var jsonData = jsonDecode(response.body);
         for (var eachSet in jsonData) {
           print(eachSet["word"]);
-          wordList.add(word(word1: eachSet["word"], id: eachSet["id"]));
+          wordList.add(word(word1: eachSet["word"], id: eachSet["id"], meaning: eachSet["meaning"]));
         }
       });
     } else {
@@ -107,29 +109,51 @@ class _TestingpageState extends State<Testingpage> {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 50),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.blueGrey,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      wordList[currentIndex].word1,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showMeaning = !_showMeaning;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 50),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.blueGrey,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.center,
+                      child: Column(
+                        children: [
+                          Text(
+                            _showMeaning
+                              ? wordList[currentIndex].meaning // 顯示 meaning
+                              : wordList[currentIndex].word1, // 顯示 word1
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            "點擊顯示意思",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

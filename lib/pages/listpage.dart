@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:fl_chart/fl_chart.dart';
 
 
 class ListPage extends StatefulWidget {
@@ -255,6 +256,102 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
+    Future<List<Map<String, dynamic>>> fetchGraphData(int id) async {
+    final response = await http.get(
+      Uri.parse('http://192.168.193.141:5000/API/Record/$id'),
+    );
+
+    if (response.statusCode == 200) {
+      List jsonData = jsonDecode(response.body);
+      return jsonData.map<Map<String, dynamic>>((item) {
+        return {
+          "date": DateTime.parse(item['date']), // 解析日期
+          "difficulty": item['difficulty'],
+        };
+      }).toList();
+    } else {
+      throw Exception('Failed to fetch graph data');
+    }
+  }
+
+
+  void showGraphDialog(int id) async {
+    try {
+      final graphData = await fetchGraphData(id);
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Difficulty Over Time"),
+          content: Container(
+            width: 300,
+            height: 200,
+            child: LineChart(
+              LineChartData(
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: graphData
+                        .map((data) => FlSpot(
+                            data['date'].millisecondsSinceEpoch.toDouble(),
+                            data['difficulty'].toDouble()))
+                        .toList(),
+                    isCurved: false,
+                    barWidth: 2,
+                    belowBarData: BarAreaData(show: false),
+                  ),
+                ],
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, _) {
+                        DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                        return Text(
+                          "${date.month}/${date.day}",
+                          style: TextStyle(fontSize: 10),
+                        );
+                      },
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: (value, _) {
+                        return Text(
+                          "${value.toInt()}",
+                          style: TextStyle(fontSize: 10),
+                        );
+                      },
+                    ),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                ),
+                borderData: FlBorderData(show: true),
+                gridData: FlGridData(show: false),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close"),
+            ),
+          ],
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching data: $error')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -337,6 +434,7 @@ class _ListPageState extends State<ListPage> {
                       icon: Icon(Icons.history, color: Colors.blue),
                       onPressed: () {
                         print("object");
+                        showGraphDialog(itemList[index]['id']);
                       },
                     ),
                     IconButton(
