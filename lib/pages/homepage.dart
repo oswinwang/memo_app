@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/learningpage1.dart';
 import 'package:memorize/pages/setting1.dart';
+import 'package:memorize/pages/object.dart';
 
 class HomePage extends StatefulWidget {
   final String id;
@@ -20,7 +21,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     // 在此处通过 widget.id 来访问传递的 id
-    _pages.add(LearningPage1(widget.id, widget.usewName)); // 将 id 传递给 LearningPage1
+    _pages.add(LearningPage1(widget.id, widget.usewName));
+    _pages.add(ObjectPage(widget.id));
     _pages.add(Setting1(widget.id, widget.usewName));
   }
 
@@ -70,6 +72,9 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.home),
             label: "Home",
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bakery_dining),
+            label: "Package",),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: "Settings",

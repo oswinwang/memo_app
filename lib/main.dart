@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_import, duplicate_ignore
 
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:memorize/pages/choosepage.dart';
 import 'package:memorize/pages/homepage.dart';
@@ -18,8 +17,6 @@ void main() async {
   runApp(MyApp());
 }
 
-// ignore_for_file: prefer_const_constructors
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
@@ -28,7 +25,8 @@ class MyApp extends StatelessWidget {
       create: (context) => Memolistset(),
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: HomePage("1", "1"),
+        //HomePage("1", "1")
       )
     );
   }

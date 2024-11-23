@@ -384,7 +384,10 @@ class _ListPageState extends State<ListPage> {
                   ),
                   PopupMenuItem(
                     value: 'DeleteAll',
-                    child: Text('刪除整個記憶集'),
+                    child: Text(
+                      '刪除整個記憶集',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   ),
                 ],
               ).then((value) {
