@@ -51,7 +51,7 @@ class _TestingpageState extends State<Testingpage> {
         }
       });
     } else {
-      
+      throw Exception('Failed to load strings');
     }
   }
 
@@ -96,7 +96,7 @@ class _TestingpageState extends State<Testingpage> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
-          "Testing Page - ${widget.name}",  // 在標題顯示選擇的 name
+          "Testing Page - ${widget.name}",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -134,8 +134,8 @@ class _TestingpageState extends State<Testingpage> {
                         children: [
                           Text(
                             _showMeaning
-                              ? wordList[currentIndex].meaning // 顯示 meaning
-                              : wordList[currentIndex].word1, // 顯示 word1
+                              ? wordList[currentIndex].meaning
+                              : wordList[currentIndex].word1,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,

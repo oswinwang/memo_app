@@ -14,7 +14,14 @@ class ObjectPage extends StatefulWidget {
 
 class _ObjectPageState extends State<ObjectPage> {
   int _currentPage = 0;
-  int _coins = 100;
+  double _coins = 150.0;
+
+  final List<Map<String, dynamic>> items = const [
+    {"id": 1, "name": "初級徽章", "image": "assets/images/item1.png", "price": 100.0, "obtain": true},
+    {"id": 2, "name": "中級徽章", "image": "assets/images/item2.png", "price": 200.0, "obtain": true},
+    {"id": 3, "name": "高級徽章", "image": "assets/images/item3.png", "price": 500.0, "obtain": false},
+    {"id": 4, "name": "至高榮耀", "image": "assets/images/item4.png", "price": 1000.0, "obtain": true},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,44 +30,57 @@ class _ObjectPageState extends State<ObjectPage> {
       body: Stack(
         children: [
           Center(
-            child: _currentPage == 0
-                ? const Mypackagepage()
-                : const ShopListView(),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+              child: _currentPage == 0
+                  ? Mypackagepage(
+                      key: ValueKey<int>(_currentPage),
+                      userMoney: _coins,
+                      purchasedItems: items,
+                    )
+                  : ShopListView(
+                      key: ValueKey<int>(_currentPage),
+                      items: items,
+                    ),
+            ),
           ),
           Positioned(
             top: 10,
             right: 15,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.yellow[600],
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-                border: Border.all(
-                  color: Colors.yellow[700]!, // 邊框顏色
-                  width: 3.0, // 邊框寬度
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.attach_money, color: Colors.white),
-                  Text(
-                    '$_coins',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+            child: _currentPage == 0
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.yellow[600],
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: Colors.yellow[700]!,
+                        width: 3.0,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.attach_money, color: Colors.white),
+                        Text(
+                          '$_coins',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
           ),
           Positioned(
             bottom: 10,

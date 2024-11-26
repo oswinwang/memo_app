@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:memorize/pages/learningpage1.dart';
 import 'package:memorize/pages/setting1.dart';
 import 'package:memorize/pages/object.dart';
@@ -15,18 +16,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List _pages = [];
+  final List<Widget> _pages = [];
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // 在此处通过 widget.id 来访问传递的 id
     _pages.add(LearningPage1(widget.id, widget.usewName));
     _pages.add(ObjectPage(widget.id));
     _pages.add(Setting1(widget.id, widget.usewName));
   }
-
-  int _selectedIndex = 0;
 
   void _navigateBottomBar(int index) {
     setState(() {
@@ -38,46 +37,63 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Memorize",
           style: TextStyle(
             color: Colors.white,
-          )
-          ),
+            fontSize: 32,
+            ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.blueGrey,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white,
         ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: Icon(Icons.info_outline),
+            icon: const Icon(Icons.info_outline),
             onPressed: () {
               print('Info page');
             },
-        )],
+          )
+        ],
       ),
-
-      body: _pages[_selectedIndex],
-
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blueGrey, // 设置背景颜色
-        selectedItemColor: Colors.white, // 选中图标和文字的颜色
-        unselectedItemColor: Colors.grey[400], // 未选中图标和文字的颜色
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: _pages[_selectedIndex],
+      ),
+      bottomNavigationBar: SalomonBottomBar(
+        backgroundColor: Colors.blueGrey,
         currentIndex: _selectedIndex,
-        onTap: _navigateBottomBar,  
+        onTap: _navigateBottomBar,
+        margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
+          /// Home
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.home, size: 30),
+            title: const Text("Home"),
+            selectedColor: Colors.white,
+            unselectedColor: Colors.white60
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bakery_dining),
-            label: "Package",),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "Settings",
+
+          /// Package
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.bakery_dining, size: 30),
+            title: const Text("Package"),
+            selectedColor: Colors.white,
+            unselectedColor: Colors.white60
+          ),
+
+          /// Settings
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.settings, size: 30),
+            title: const Text("Settings"),
+            selectedColor: Colors.white,
+            unselectedColor: Colors.white60
           ),
         ],
       ),

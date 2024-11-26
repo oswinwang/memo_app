@@ -6,7 +6,9 @@ import 'package:memorize/pages/choosepage.dart';
 import 'package:memorize/pages/homepage.dart';
 import 'package:memorize/pages/learningpage1.dart';
 import 'package:memorize/pages/logginpage.dart';
+import 'package:memorize/pages/object.dart';
 import 'package:memorize/pages/setting1.dart';
+import 'package:memorize/pages/spellingpage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'model/memoListSet.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: HomePage("1", "1"),
         //HomePage("1", "1")
+        //SpellingPage(name: '', userid: '', username: '',),
+        
       )
     );
   }
