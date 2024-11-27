@@ -17,10 +17,48 @@ class Mypackagepage extends StatefulWidget {
 }
 
 class _MypackagepageState extends State<Mypackagepage> {
+  void _showItemDetails(BuildContext context, Map<String, dynamic> item) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(item['name']),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                item['image'],
+                fit: BoxFit.cover,
+                width: 100,
+                height: 100,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "描述: \n${item['details'] ?? '未知'}",
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "價格: \$${item['price'] ?? '未知'}",
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("關閉"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> obtainedItems =
-      widget.purchasedItems.where((item) => item['obtain'] == true).toList();
+        widget.purchasedItems.where((item) => item['obtain'] == true).toList();
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -63,31 +101,34 @@ class _MypackagepageState extends State<Mypackagepage> {
               itemCount: obtainedItems.length,
               itemBuilder: (context, index) {
                 final item = obtainedItems[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            item['image'],
-                            fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () => _showItemDetails(context, item),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.asset(
+                              item['image'],
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Text(
-                        item['name'],
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
+                        const SizedBox(width: 16),
+                        Text(
+                          item['name'],
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

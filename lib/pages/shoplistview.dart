@@ -1,13 +1,34 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class ShopListView extends StatelessWidget {
-  final List<Map<String, dynamic>> items; 
-  const ShopListView({super.key, required this.items});
+class ShopListView extends StatefulWidget {
+  final List<Map<String, dynamic>> items;
+  final String userId;
+
+  const ShopListView({super.key, required this.items, required this.userId});
+
+  @override
+  State<ShopListView> createState() => _ShopListViewState();
+}
+
+class _ShopListViewState extends State<ShopListView> {
+  late List<Map<String, dynamic>> filteredItems;
+
+  @override
+  void initState() {
+    super.initState();
+    _filterItems();
+  }
+
+  void _filterItems() {
+    setState(() {
+      filteredItems = widget.items.where((item) => item["obtain"] == false).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filteredItems = items.where((item) => item["obtain"] == false).toList();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,7 +50,7 @@ class ShopListView extends StatelessWidget {
                 final item = filteredItems[index];
                 return GestureDetector(
                   onTap: () {
-                    _showPurchaseDialog(context, item["name"], item["price"]);
+                    _showPurchaseDialog(context, item);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -78,12 +99,12 @@ class ShopListView extends StatelessWidget {
     );
   }
 
-  void _showPurchaseDialog(BuildContext context, String itemName, double itemPrice) {
+  void _showPurchaseDialog(BuildContext context, Map<String, dynamic> item) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text("確認購買"),
-        content: Text("確定要購買 $itemName 嗎？\n價格為 \$ $itemPrice"),
+        content: Text("確定要購買 ${item["name"]} 嗎？\n價格為 \$ ${item["price"]}"),
         actions: [
           TextButton(
             onPressed: () {
@@ -94,7 +115,7 @@ class ShopListView extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
-              _processPurchase(context, itemName);
+              _purchaseItem(context, item);
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
@@ -106,9 +127,35 @@ class ShopListView extends StatelessWidget {
     );
   }
 
-  void _processPurchase(BuildContext context, String itemName) {
+  Future<void> _purchaseItem(BuildContext context, Map<String, dynamic> item) async {
+    final url = Uri.parse('http://192.168.193.141:5000/API/Purchase/${widget.userId}/${item["id"]}');
+    try {
+      final response = await http.post(url);
+      if (response.statusCode == 201) {
+        setState(() {
+          item["obtain"] = true; // 更新本地的物品狀態
+          _filterItems(); // 重新整理清單
+        });
+        _showSnackBar(context, "成功購買了 ${item["name"]}!");
+      } else if (response.statusCode == 400) {
+        final message = json.decode(response.body)["message"];
+        _showSnackBar(context, "購買失敗: 資金不足！");
+      } else {
+        _showSnackBar(context, "購買失敗: 伺服器錯誤！");
+      }
+    } catch (e) {
+      _showSnackBar(context, "購買失敗: 請檢查網路連線！");
+    }
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("成功購買了 $itemName!")),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.black,
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 }
+

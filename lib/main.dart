@@ -27,9 +27,10 @@ class MyApp extends StatelessWidget {
       create: (context) => Memolistset(),
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage("1", "1"),
-        //HomePage("1", "1")
+        home: HomePage("1", "1")
+        //HomePage("1", "1"),
         //SpellingPage(name: '', userid: '', username: '',),
+        //LoginPage(),
         
       )
     );

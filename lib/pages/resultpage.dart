@@ -16,7 +16,7 @@ class Resultpage extends StatelessWidget {
 
   void fetchData() async {
     final response = await http.post(
-      Uri.parse('http://192.168.193.141:5000/API/complete_test/${id}'),
+      Uri.parse('http://192.168.193.141:5000/API/CompleteTest/${id}'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -62,7 +62,7 @@ class Resultpage extends StatelessWidget {
               ElevatedButton(
                 style: ButtonStyles.elevatedButtonStyle(),
                 onPressed: () {
-                  //fetchData();
+                  fetchData();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage(id, userName)),
